@@ -76,6 +76,18 @@
             transform: translateY(-2px);
         }
 
+        h1 {
+            font-size: 2.5rem;
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        p {
+            font-size: 1.1rem;
+            text-align: center;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
         .upload-area {
             border: 2px dashed var(--primary-color);
             border-radius: var(--border-radius);
@@ -83,6 +95,7 @@
             text-align: center;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            animation: slideIn 1s ease-in-out;
         }
 
         .upload-area:hover {
@@ -107,6 +120,7 @@
         .compression-options {
             margin: 20px 0;
             text-align: center;
+            animation: fadeIn 2s ease-in-out;
         }
 
         .compression-options label {
@@ -134,31 +148,10 @@
             box-shadow: 0 0 12px rgba(0, 123, 255, 0.5);
         }
 
-        #compress-btn {
-            background-color: var(--primary-color);
-            color: var(--white);
-            padding: 12px 30px;
-            border: none;
-            border-radius: var(--border-radius);
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            display: block;
-            margin: 20px auto;
-        }
-
-        #compress-btn:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-2px);
-        }
-
-        #compress-btn:active {
-            transform: translateY(0);
-        }
-
         #preview-container {
             text-align: center;
             margin: 20px 0;
+            animation: fadeIn 2.5s ease-in-out;
         }
 
         #preview-image {
@@ -178,6 +171,7 @@
             display: none;
             text-align: center;
             margin-top: 20px;
+            animation: fadeIn 3s ease-in-out;
         }
 
         #download-link a {
@@ -202,6 +196,7 @@
             color: var(--white);
             margin-top: 50px;
             box-shadow: var(--shadow);
+            animation: fadeIn 3.5s ease-in-out;
         }
 
         footer p {
@@ -230,20 +225,32 @@
             to { transform: translateY(0); opacity: 1; }
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
         /* Responsive Design */
         @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+
             .compression-options select {
                 width: 100%;
             }
+        }
 
-            #compress-btn {
-                width: 100%;
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            p {
+                font-size: 0.9rem;
+            }
+
+            .upload-area p {
+                font-size: 1rem;
             }
         }
     </style>
@@ -284,9 +291,6 @@
             </select>
         </div>
 
-        <!-- Compress Button -->
-        <button class="cta-button" id="compress-btn">Compress Image</button>
-
         <!-- Image Preview and Download Link -->
         <div id="preview-container">
             <img id="preview-image" src="#" alt="Compressed Image Preview">
@@ -306,7 +310,6 @@
         const fileInput = document.getElementById('image-input');
         const previewImage = document.getElementById('preview-image');
         const downloadLink = document.getElementById('download-link');
-        const compressBtn = document.getElementById('compress-btn');
         const compressionLevel = document.getElementById('compression-level');
 
         // Drag-and-Drop Functionality
@@ -345,7 +348,7 @@
         }
 
         // Compress Image Functionality
-        compressBtn.addEventListener('click', () => {
+        compressionLevel.addEventListener('change', () => {
             if (!fileInput.files.length) {
                 alert('Please select an image first.');
                 return;
