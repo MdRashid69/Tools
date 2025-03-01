@@ -120,6 +120,40 @@
             border: 1px solid #ccc;
             border-radius: var(--border-radius);
             font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .compression-options select:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+        }
+
+        .compression-options select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 12px rgba(0, 123, 255, 0.5);
+        }
+
+        #compress-btn {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 12px 30px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            display: block;
+            margin: 20px auto;
+        }
+
+        #compress-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        #compress-btn:active {
+            transform: translateY(0);
         }
 
         #preview-container {
@@ -133,6 +167,11 @@
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
             display: none; /* Hidden by default */
+            transition: transform 0.3s ease;
+        }
+
+        #preview-image:hover {
+            transform: scale(1.05);
         }
 
         #download-link {
@@ -154,6 +193,58 @@
         #download-link a:hover {
             background-color: var(--secondary-color);
             transform: translateY(-2px);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            margin-top: 50px;
+            box-shadow: var(--shadow);
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--white);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--secondary-color);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .compression-options select {
+                width: 100%;
+            }
+
+            #compress-btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -206,7 +297,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2025 ToolHub. All rights reserved.</p>
+        <p>&copy; 2025 ToolHub. All rights reserved. | <a href="privacy-policy.html">Privacy Policy</a></p>
     </footer>
 
     <script>
