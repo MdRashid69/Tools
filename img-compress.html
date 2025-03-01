@@ -75,6 +75,86 @@
             background-color: var(--secondary-color);
             transform: translateY(-2px);
         }
+
+        .upload-area {
+            border: 2px dashed var(--primary-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .upload-area:hover {
+            background-color: rgba(0, 123, 255, 0.1);
+        }
+
+        .upload-area.dragover {
+            background-color: rgba(0, 123, 255, 0.2);
+            border-color: var(--secondary-color);
+        }
+
+        .upload-area p {
+            margin: 0;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .compression-options {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .compression-options label {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .compression-options select {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+
+        #preview-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        #preview-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            display: none; /* Hidden by default */
+        }
+
+        #download-link {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #download-link a {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 12px 30px;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        #download-link a:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
@@ -96,11 +176,111 @@
         <!-- Compress Image Tool Content -->
         <h1>Compress Image</h1>
         <p>Reduce the size of your images without losing quality.</p>
-        <!-- Add your compress image tool functionality here -->
+
+        <!-- Drag-and-Drop or Select Image Area -->
+        <div class="upload-area" id="upload-area">
+            <p>Drag & Drop or Click to Upload Image</p>
+            <input type="file" id="image-input" accept="image/*">
+        </div>
+
+        <!-- Compression Level Selection -->
+        <div class="compression-options">
+            <label for="compression-level">Compression Level:</label>
+            <select id="compression-level">
+                <option value="0.1">Low (10%)</option>
+                <option value="0.5" selected>Medium (50%)</option>
+                <option value="0.9">High (90%)</option>
+            </select>
+        </div>
+
+        <!-- Compress Button -->
+        <button class="cta-button" id="compress-btn">Compress Image</button>
+
+        <!-- Image Preview and Download Link -->
+        <div id="preview-container">
+            <img id="preview-image" src="#" alt="Compressed Image Preview">
+        </div>
+        <div id="download-link">
+            <a id="download-btn" download="compressed-image.jpg">Download Compressed Image</a>
+        </div>
     </main>
 
     <footer>
         <p>&copy; 2025 ToolHub. All rights reserved.</p>
     </footer>
+
+    <script>
+        // JavaScript Functionality
+        const uploadArea = document.getElementById('upload-area');
+        const fileInput = document.getElementById('image-input');
+        const previewImage = document.getElementById('preview-image');
+        const downloadLink = document.getElementById('download-link');
+        const compressBtn = document.getElementById('compress-btn');
+        const compressionLevel = document.getElementById('compression-level');
+
+        // Drag-and-Drop Functionality
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            fileInput.files = e.dataTransfer.files;
+            handleFile(fileInput.files[0]);
+        });
+
+        uploadArea.addEventListener('click', () => fileInput.click());
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        // Handle File Upload
+        function handleFile(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewImage.src = e.target.result;
+                previewImage.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Compress Image Functionality
+        compressBtn.addEventListener('click', () => {
+            if (!fileInput.files.length) {
+                alert('Please select an image first.');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const level = parseFloat(compressionLevel.value);
+
+            const img = new Image();
+            img.src = URL.createObjectURL(file);
+
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+
+                canvas.toBlob((blob) => {
+                    const compressedUrl = URL.createObjectURL(blob);
+                    previewImage.src = compressedUrl;
+                    downloadLink.style.display = 'block';
+                    document.getElementById('download-btn').href = compressedUrl;
+                }, 'image/jpeg', level);
+            };
+        });
+    </script>
 </body>
 </html>
